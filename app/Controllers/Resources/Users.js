@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const ResourceController = require('../../Framework/ResourceController.js');
 const Promise = require('bluebird');

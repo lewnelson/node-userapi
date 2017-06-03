@@ -92,7 +92,6 @@ module.exports = class ResourceValidation {
           return field.attributes.indexOf('readonly') === -1;
         }).slice().map((field) => {
           let requiredIndex = field.attributes.indexOf('required');
-          console.log(requiredIndex);
           if(requiredIndex > -1) {
             field.attributes.splice(requiredIndex, 1);
           }

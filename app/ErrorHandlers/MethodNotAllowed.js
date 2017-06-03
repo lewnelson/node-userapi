@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const ErrorHandler = require('../Framework/ErrorHandler.js');
 module.exports = class MethodNotAllowed extends ErrorHandler {

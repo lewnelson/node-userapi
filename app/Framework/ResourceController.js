@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const Controller = require('./Controller.js');
 
