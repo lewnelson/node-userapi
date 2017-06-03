@@ -1,0 +1,20 @@
+## Sample configurations
+# 
+# Each config value here represents the default value if no config value is
+# available
+# 
+# Config values can contain special parameters wrapped in %% which reference
+# various values, the following variables are available
+#  - root_dir, app root directory
+
+# Port to bind http server
+port: 8080
+
+# Sequelize database connection options
+db:
+  database: 'main'
+  username: ''
+  password: ''
+  connectionOptions:
+    dialect: 'sqlite'
+    storage: '%%root_dir%%database.sqlite'
