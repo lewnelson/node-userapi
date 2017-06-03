@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  *  Container class can have registered callbacks on keys, once a registered
