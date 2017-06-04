@@ -44,7 +44,15 @@ module.exports = class Users extends Model {
    *  @return {User} user database model
    */
   createUser(params) {
-    return this.getService('Database.js').getDatabaseModel('User.js').create(params);
+    return new Promise((resolve, reject) => {
+      this.getService('Database.js').getDatabaseModel('User.js').create(params).then((user) => {
+        resolve(user);
+      }).catch(this.getService('Database.js').getConnection().UniqueConstraintError, (err) => {
+        reject(this.resourceConflict(err.errors));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
   }
 
   /**
@@ -79,11 +87,7 @@ module.exports = class Users extends Model {
           user.update(params).then((user) => {
             resolve(user);
           }).catch(this.getService('Database.js').getConnection().UniqueConstraintError, (err) => {
-            let error = new Error('Resource conflict');
-            error.code = 409;
-            error.status = 409;
-            error.context = err.errors;
-            reject(error);
+            reject(this.resourceConflict(err.errors));
           }).catch((err) => {
             reject(err);
           });

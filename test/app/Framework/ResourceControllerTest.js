@@ -321,6 +321,7 @@ describe('ResourceController framework class tests', () => {
   it('should cross reference incoming request body with the current route resourceSchema to build list for getCreateParams', () => {
     let dataSets = [
       {
+        overwriteValues: false,
         getResourceSchema: () => {
           return [{ key: 'test', attributes: ['readonly'] }, { key: 'field', attributes: [] }];
         },
@@ -335,6 +336,7 @@ describe('ResourceController framework class tests', () => {
         }
       },
       {
+        overwriteValues: false,
         getResourceSchema: () => {
           return [{ key: 'test', attributes: ['readonly'] }, { key: 'field', attributes: [] }];
         },
@@ -345,6 +347,20 @@ describe('ResourceController framework class tests', () => {
         },
         getExpectedCreateParams: () => {
           return {};
+        }
+      },
+      {
+        overwriteValues: true,
+        getResourceSchema: () => {
+          return [{ key: 'test', attributes: ['readonly'] }, { key: 'field', attributes: [] }];
+        },
+        getRequestBody: () => {
+          return {
+            test: 'value'
+          };
+        },
+        getExpectedCreateParams: () => {
+          return {field: null};
         }
       }
     ];
@@ -359,19 +375,38 @@ describe('ResourceController framework class tests', () => {
         return { body: dataSet.getRequestBody() };
       };
 
-      expect(resourceController.getCreateParams()).to.deep.equal(dataSet.getExpectedCreateParams());
+      expect(resourceController.getCreateParams(dataSet.overwriteValues)).to.deep.equal(dataSet.getExpectedCreateParams());
     });
   });
 
-  it('should forward calls to getCreateParams from getUpdateParams', () => {
+  it('should call getCreateParams with argument 0 as true when request is PUT from getUpdateParams', () => {
     const resourceController = new ResourceController();
-    let callCount = 0;
-    resourceController.getCreateParams = () => {
-      callCount++;
+    resourceController.getRequest = () => {
+      return {
+        method: 'PUT'
+      };
+    };
+
+    resourceController.getCreateParams = (arg) => {
+      expect(arg).to.be.true;
     };
 
     resourceController.getUpdateParams();
-    expect(callCount).to.equal(1);
+  });
+
+  it('should call getCreateParams with argument 0 as false when request is not PUT from getUpdateParams', () => {
+    const resourceController = new ResourceController();
+    resourceController.getRequest = () => {
+      return {
+        method: 'PATCH'
+      };
+    };
+
+    resourceController.getCreateParams = (arg) => {
+      expect(arg).to.be.false;
+    };
+
+    resourceController.getUpdateParams();
   });
 
   it('should return an Error from resourceNotFound with a code and status of 404 and a message of `Resource not found`', () => {

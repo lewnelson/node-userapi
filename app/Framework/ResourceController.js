@@ -167,9 +167,12 @@ module.exports = class ResourceController extends Controller {
   /**
    *  Get params for creating resource
    *
+   *  @param {bool} overwriteValues Should any optional values be set to null
+   *                                explicitly, defaults to false
+   *                                
    *  @return {object}
    */
-  getCreateParams() {
+  getCreateParams(overwriteValues) {
     let fields = this.getCurrentRoute().resourceSchema.filter((field) => field.attributes.indexOf('readonly') === -1),
         params = {};
 
@@ -177,6 +180,8 @@ module.exports = class ResourceController extends Controller {
       let field = fields.shift();
       if(this.getRequest().body[field.key] !== undefined) {
         params[field.key] = this.getRequest().body[field.key];
+      } else if(overwriteValues === true) {
+        params[field.key] = null;
       }
     }
 
@@ -189,7 +194,7 @@ module.exports = class ResourceController extends Controller {
    *  @return {object}
    */
   getUpdateParams() {
-    return this.getCreateParams();
+    return this.getCreateParams(this.getRequest().method.toUpperCase() === 'PUT');
   }
 
   /**
