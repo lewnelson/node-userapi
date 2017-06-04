@@ -10,8 +10,8 @@ module.exports = class NotFound extends ErrorHandler {
   handle() {
     this.getResponse().status(404).json({
       error: {
-        code: this.getError().code !== undefined ? this.getError().code : -1,
-        message: this.getError().message,
+        code: this.getError().code !== undefined ? this.getError().code : 404,
+        message: this.getError().message !== undefined ? this.getError().message : 'not found',
         context: this.getError().context !== undefined ? this.getError().context : {}
       }
     });

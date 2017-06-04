@@ -10,8 +10,8 @@ module.exports = class BadRequest extends ErrorHandler {
   handle() {
     this.getResponse().status(400).json({
       error: {
-        code: this.getError().code !== undefined ? this.getError().code : -1,
-        message: this.getError().message,
+        code: this.getError().code !== undefined ? this.getError().code : 400,
+        message: this.getError().message !== undefined ? this.getError().message : 'bad request',
         context: this.getError().context !== undefined ? this.getError().context : {}
       }
     });

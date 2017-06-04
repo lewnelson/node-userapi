@@ -8,20 +8,44 @@ module.exports = class ServerError extends ErrorHandler {
    *  @return {void}
    */
   handle() {
-    let stack = this.getError().stack !== undefined ? this.getError().stack.split('\n') : [];
-    this.getResponse().status(500).json({
-      error: {
-        code: this.getError().code !== undefined ? this.getError().code : -1,
-        message: this.getError().message,
-        trace: {
-          fileName: this.getError().fileName || '',
-          lineNumber: this.getError().lineNumber !== undefined ? this.getError().lineNumber : -1,
-          name: this.getError().name || '',
-          stack: stack
-        },
-        context: this.getError().context !== undefined ? this.getError().context : {}
-      }
-    });
+    let error;
+    if(this.getService('Config.js').getConfig('debug', false) === true) {
+      error = {
+        error: this.getDebugErrorObject()
+      };
+    } else {
+      error = {
+        error: {
+          code: 500,
+          message: 'server error',
+          context: {}
+        }
+      };
+    }
+
+    this.getResponse().status(500).json(error);
+  }
+
+  /**
+   *  Get error object for debug and logging
+   *
+   *  @return {object}
+   */
+  getDebugErrorObject() {
+    return {
+      url: this.getRequest().originalUrl,
+      hostname: this.getRequest().hostname,
+      protocol: this.getRequest().protocol,
+      code: this.getError().code !== undefined ? this.getError().code : 500,
+      message: this.getError().message !== undefined ? this.getError().message : 'server error',
+      trace: {
+        fileName: this.getError().fileName !== undefined ? this.getError().fileName : '',
+        lineNumber: this.getError().lineNumber !== undefined ? this.getError().lineNumber : -1,
+        name: this.getError().name !== undefined ? this.getError().name : '',
+        stack: this.getError().stack !== undefined ? this.getError().stack.split('\n') : []
+      },
+      context: this.getError().context !== undefined ? this.getError().context : {}
+    };
   }
 
   /**
@@ -30,20 +54,6 @@ module.exports = class ServerError extends ErrorHandler {
    *  @return {void}
    */
   log() {
-    let stack = this.getError().stack !== undefined ? this.getError().stack.split('\n') : [];
-    this.getService('Logger.js').write('error', 'server_error', {
-      url: this.getRequest().originalUrl,
-      hostname: this.getRequest().hostname,
-      protocol: this.getRequest().protocol,
-      code: this.getError().code !== undefined ? this.getError().code : -1,
-      message: this.getError().message,
-      trace: {
-        fileName: this.getError().fileName || '',
-        lineNumber: this.getError().lineNumber !== undefined ? this.getError().lineNumber : -1,
-        name: this.getError().name || '',
-        stack: stack
-      },
-      context: this.getError().context !== undefined ? this.getError().context : {}
-    });
+    this.getService('Logger.js').write('error', 'server_error', this.getDebugErrorObject());
   }
 }
