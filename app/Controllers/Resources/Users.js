@@ -36,6 +36,8 @@ module.exports = class Users extends ResourceController {
           this.getResponse().json(this.formatCollection(users, totalUsers));
           resolve();
         }
+      }, (err) => {
+        reject(err);
       });
     });
   }
@@ -49,13 +51,11 @@ module.exports = class Users extends ResourceController {
     const usersModel = this.getModel('Users.js');
     return new Promise((resolve, reject) => {
       usersModel.createUser(this.getCreateParams()).then((user) => {
-        if(user === null) {
-          reject(this.resourceNotFound());
-        } else {
-          user = this.formatResource(user.dataValues, 'resource:users:get');
-          this.getResponse().json(user);
-          resolve();
-        }
+        user = this.formatResource(user.dataValues, 'resource:users:get');
+        this.getResponse().json(user);
+        resolve();
+      }, (err) => {
+        reject(err);
       });
     });
   }
@@ -76,6 +76,8 @@ module.exports = class Users extends ResourceController {
           this.getResponse().json(user);
           resolve();
         }
+      }, (err) => {
+        reject(err);
       });
     });
   }
@@ -110,8 +112,11 @@ module.exports = class Users extends ResourceController {
   deleteUser() {
     const usersModel = this.getModel('Users.js');
     return new Promise((resolve, reject) => {
-      usersModel.deleteUser(this.getRequest.params.id).then(() => {
+      usersModel.deleteUser(this.getRequest().params.id).then(() => {
         this.getResponse().status(200).end();
+        resolve();
+      }, (err) => {
+        reject(err);
       });
     });
   }
