@@ -96,5 +96,6 @@ describe('Framework container class tests', () => {
     mockRequire('/Models/Test.js', modelClass);
     controller.getModel('Test.js');
     expect(modelSetServiceContainerSpy.callCount).to.equal(1);
+    mockRequire.stopAll();
   });
 });

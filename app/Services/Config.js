@@ -14,7 +14,7 @@ module.exports = class Config extends Service {
    *  @return {string}
    */
   swapConfigVars(configString) {
-    return configString.replace(/%%(.*?)(?=%%)%%/, (match, identifier) => {
+    return configString.replace(/%%(.*?)(?=%%)%%/g, (match, identifier) => {
       switch(identifier) {
         case 'root_dir':
           return this.getService('Environment.js').getRootDir();
@@ -53,6 +53,6 @@ module.exports = class Config extends Service {
    *  @return {mixed}
    */
   getConfig(key, fallback) {
-    return this.getCompiledConfiguration()[key] || fallback;
+    return this.getCompiledConfiguration()[key] !== undefined ? this.getCompiledConfiguration()[key] : fallback;
   }
 }
