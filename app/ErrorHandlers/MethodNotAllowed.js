@@ -10,7 +10,7 @@ module.exports = class MethodNotAllowed extends ErrorHandler {
   handle() {
     this.getResponse()
       .status(405)
-      .append('Allow', this.getError().methodsAllowed.map((m) => m.toUpperCase()).join(','))
+      .append('Allow', this.getError().methodsAllowed.map((m) => m.toUpperCase()).join(', '))
       .json({
         error: {
           code: this.getError().code !== undefined ? this.getError().code : -1,

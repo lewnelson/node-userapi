@@ -6,6 +6,7 @@ const ResourceValidation = require('./RouteMiddleware/ResourceValidation.js');
 const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
+const clone = require('clone');
 
 /**
  *  Application instance, will setup services, routes and error handlers
@@ -90,6 +91,27 @@ module.exports = class App extends ServiceAware {
   }
 
   /**
+   *  Validates a request method against a route and will throw a method not
+   *  allowed error if the method is not allowed.
+   *
+   *  @param {Request} req Express request
+   *  @param {Route} route
+   *  @param {array} routes All routes
+   *  @throws {Error} If method is not allowed
+   *  @return {void}
+   */
+  validateRequestMethod(req, route, routes) {
+    let availableMethods = routes.filter((r) => r.path === route.path).map((r) => r.httpMethod.toUpperCase());
+    if(availableMethods.indexOf(req.method.toUpperCase()) < 0) {
+      let error = new Error();
+      error.code = 405;
+      error.status = 405;
+      error.methodsAllowed = availableMethods;
+      throw error;
+    }
+  }
+
+  /**
    *  Binds a route onto the express instance
    *
    *  @param {object} route The route object to bind
@@ -97,17 +119,23 @@ module.exports = class App extends ServiceAware {
    */
   bindRoute(route) {
     this.routes.push(route);
-    this.getApp()[route.httpMethod](route.path, (req, res, next) => {
+    this.getApp().all(route.path, (req, res, next) => {
+      this.validateRequestMethod(req, route, this.routes);
+      if(req.method.toUpperCase() !== route.httpMethod.toUpperCase()) {
+        next();
+        return;
+      }
+
       let controllerClass = require(this.getService('Environment.js').getControllerDir() + route.controller.path),
           controller = new controllerClass();
 
       controller.setServiceContainer(this.getServiceContainer());
       controller.setRequest(req).setResponse(res);
-      controller.setCurrentRoute(route);
-      controller.setRoutes(this.routes);
+      controller.setCurrentRoute(clone(route));
+      controller.setRoutes(clone(this.routes));
       try {
         const validation = new ResourceValidation();
-        validation.validateRequest(req, route);
+        validation.validateRequest(req, clone(route));
         controller[route.controller.method]().then(() => {
           next();
         }, (err) => {

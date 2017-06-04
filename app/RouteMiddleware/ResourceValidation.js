@@ -36,9 +36,9 @@ module.exports = class ResourceValidation {
 
       if(field.attributes.indexOf('required') > -1 && value === undefined) {
         fieldErrors.push('missing required value');
-      } else if(!this.checkType(value, field.type)) {
+      } else if(value !== undefined && !this.checkType(value, field.type)) {
         fieldErrors.push('invalid type, expecting ' + field.type);
-      } else {
+      } else if(value !== undefined) {
         field.validate.forEach((validation) => {
           if(!validation.callback(value)) {
             fieldErrors.push(validation.error);
@@ -46,14 +46,14 @@ module.exports = class ResourceValidation {
         });
       }
 
-      if(fieldErrors.length < 1) {
+      if(fieldErrors.length < 1 && value !== undefined) {
         let sanitizeObjects = field.sanitize || [];
         sanitizeObjects.forEach((obj) => {
           value = obj.callback(value);
         });
 
         req.body[field.key] = value;
-      } else {
+      } else if(fieldErrors.length >= 1) {
         errors[field.key] = fieldErrors;
       }
     });
@@ -84,6 +84,7 @@ module.exports = class ResourceValidation {
           return field.attributes.indexOf('readonly') === -1;
         });
 
+        console.log(fields);
         errors = this.validateFields(req, fields);
         break;
 
