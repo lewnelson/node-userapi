@@ -20,8 +20,8 @@ module.exports = class ResourceController extends Controller {
    *  @return {int}
    */
   getPage() {
-    let page = this.getRequest().query.page;
-    return page !== undefined ? parseInt(page) : 1;
+    let page = parseInt(this.getRequest().query.page);
+    return isNaN(page) ? 1 : page;
   }
 
   /**
@@ -116,7 +116,8 @@ module.exports = class ResourceController extends Controller {
   }
 
   /**
-   *  Format a resource from a data model object
+   *  Format a resource from a data model object, adds href to the data model
+   *  based on the routes resourceSchema or routeParams
    *
    *  @param {object} dataModel
    *  @param {string} routeName used for href
@@ -139,7 +140,8 @@ module.exports = class ResourceController extends Controller {
       }
     }
 
-    routeParams = routeParams || {id: dataModel.id || ':id'};
+    let id = dataModel.id !== undefined ? dataModel.id : ':id';
+    routeParams = routeParams || {id: id};
     dataModel.href = this.generateUrl(routeName, routeParams);
     return dataModel;
   }
@@ -154,7 +156,7 @@ module.exports = class ResourceController extends Controller {
   formatCollection(resources, totalResources) {
     return {
       count: totalResources,
-      href: this.generateUrl(this.getCurrentRoute().name, this.getRequest().params, this.getRequest().params),
+      href: this.generateUrl(this.getCurrentRoute().name, this.getRequest().params, this.getRequest().query),
       currentPage: this.getPage(),
       nextPage: this.getNextPageUrl(totalResources),
       previousPage: this.getPreviousPageUrl(),

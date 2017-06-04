@@ -50,11 +50,11 @@ describe('Framework container class tests', () => {
 
   it('should swap parameters from the parameters object into the route path', () => {
     let route = {
-          path: '/path/to/:resource/:id',
+          path: '/path/to/:resource/:id/:nonexistant',
           name: 'test'
         },
         params = {resource: 'resource', id: 1},
-        expectedPath = '/path/to/resource/1';
+        expectedPath = '/path/to/resource/1/:nonexistant';
 
     const controller = new Controller();
     controller.setRoutes([route]);
