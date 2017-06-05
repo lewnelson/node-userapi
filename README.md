@@ -1,3 +1,8 @@
+[![Build Status](https://img.shields.io/travis/lewnelson/node-userapi.svg)](https://travis-ci.org/lewnelson/node-userapi)
+[![Test Coverage](https://img.shields.io/coveralls/lewnelson/node-userapi.svg)](https://coveralls.io/github/lewnelson/node-userapi)
+[![Dependencies](https://img.shields.io/david/lewnelson/node-userapi.svg)](https://david-dm.org/lewnelson/node-userapi)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lewnelson/node-userapi/blob/master/LICENSE.md)
+
 # USER API DOCUMENTATION
 ---
 ## Contents
@@ -18,13 +23,13 @@
 
 ## Demo
 ---
-Demo available at [http://userapi.lewnelson.com/](http://userapi.lewnelson.com/) (TODO) and can be accessed using your interface of choice, I recommend [Postman](https://www.getpostman.com/).
+Demo available at [http://userapi.lewnelson.com/](http://userapi.lewnelson.com/) and can be accessed using your interface of choice, I recommend [Postman](https://www.getpostman.com/).
 
 
 ## Getting Started
 ---
 #### Using Docker
-The quickest way to host your own instance is to use the publicly available docker image available [here](https://www.docker.com/) (TODO). If you want to use custom configuration (see [configuration](#configuration) for more details) then you can map your config file using this command when starting the docker container.
+The quickest way to host your own instance is to use the publicly available docker image available [here](https://cloud.docker.com/swarm/lewnelson/repository/registry-1.docker.io/lewnelson/node-userapi/general). If you want to use custom configuration (see [configuration](#configuration) for more details) then you can map your config file using this command when starting the docker container.
 ```
 docker run -d -p 8080:8080 -v /path/to/host/app_config/directory:/mnt/data lewnelson/user-api
 ```

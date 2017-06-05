@@ -84,7 +84,6 @@ module.exports = class ResourceValidation {
           return field.attributes.indexOf('readonly') === -1;
         });
 
-        console.log(fields);
         errors = this.validateFields(req, fields);
         break;
 

@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+- '6'
+script: npm test
+after_script: cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+sudo: required
+services:
+- docker
+env:
+  global:
+  - COMMIT=${TRAVIS_COMMIT::8}
+  - secure: Q2DSJhrgcWpWL+eicK0zs9KKbdoVKbs+TzmiWYB5YLO0Pjt4Az9pQLgLKtbHBJXaEB72j+SGStmHxZdDsLov4kHpnYxzW6dc4y+NUCDJRiA+ZYTBH3S9/Py9oXp1AlvFpkswUYnqCMyWRSJ6YSj6x0n62qKrU+UobuGfn3UBhXK44K7Cw0E885Ty6l11GKV9H031Nn/h4ZL2oji5sgr3HADeqLEa7AlIfXkQhUz0B8tM4X69dT1n4Ybu/kjMBlH3sm8fmvh8TZeR/LKfVz2KHMU/BUtedFYZ9P1KDJNTZmpaN1zN9N5tl6aLeZgGFqBaq2miiVGt86Ormptt/SZDl0ITsqRcHuUP4xtJfFe3SKmJbMYosVAi4t5lLsmPm151eo+Db4YwkwYj+dqO2BkFi2whzf3tXamYEPZnom3kOELSoSHOGP69FApDpVtYffS4ILIb3KtLqXOhQJcy/Q7O7aiJRwwJqjSxfA4+K3YlWXE5uqJMWp3hAoWITPC9xukWZkrqWDh1hjips40YNcqH60jqFijjNqekqmV9J6SHWytEuWUXqWvrpnegcoxP0C0Su1bLtEoateFpcMxGPnIjohswUR5QJ0TKXzNX2slkBHw0AtXpxLuELJ4678ZhfEinpArSFAno2Gkj8xgZ3OT31a8afAvob/NYdYU/cJlcK+U=
+  - secure: Ilc/U2DMJwz7S3D/tAzx2Mc46wWHf+9Wr4JEZ7qRk6Pm+xPOC8S6d2VL1PmtiBaM2/ISNIXU+AxTu18QCO9c0KegZF6+jW6m0WawYro3Xgr9KpXBMIK4qBIyglFkWq3kvhX76e2zHtcOaZV8qEpaIGhqP5PExNpHPmlnF70j8rIkqbqUt4UrJ4Z5Of7QCCSucnde3QGQdFeWfPNle26zkz6FT+9tNfv1YhtgTvGKgZr3SbHnkrN7XihM9RgL+ZrpWReWRhE+1VCroP3jjYG5914dP7BGmHZQya34EK7LnjDpGzG/heg+s+C22h3LWyA6Tyd9xbZzX9hrGzyfGQy34YnD0H1KLs4+MmoEB4xjk8psH1CsfDz+d7A4roxM9IiSqbW0XtOkUxKw2LUidYCD87sljMxy0Q8nnSbhpKv0xfeaan06bWcaXAix4F9tF5VU3CS43etM9z1ThUqA02uH+5w6FVOLnLEBTMkmmUu9Aa3nw0+/RzaQVF+xQEh0GT52P7jGj1inYnLbD2l6yf+lFpAYCCPfcUpP0rnaZj9qGcALJ2KMHSGNh1i0C31oJDlnvaaLNMj3CTo+QsUFVxWDJJpwhChTFuplDpQThd0U2JWarv6kiJPQzFEgKPplgsTbGYMo9mHQ4nYhw22dsYjTp5IfEYfD1eJE0k1riPMXvKE=
+  - secure: KP9th/L0tq19Pp7MgdVdRoxeiRtKCBM7Qv20GC9FAExklRxBc4bR3foI+wsuBkmMcx51vjEjGtwl5xKXk39I8YFdWz6EPe61QaVR/7yzVDKp1sS2NVhZGbgWrdTfYMXearPty/pRcRZwku4y9lZFmZ605yG62eXA9IS3bdyuT4mW82wO3c5Vwxe09X/W1efspeD3Pe7manbP8yFNe/LCTC1HqJU5+Q1UOIHttT3BvzBPta1gK6t3sQyfY7WO4MnR65sKDsKZPOlzUggUqpqpL0NF4mOpRk/WXZSNAG78G+iyM6lU7Um7kCaTR6iwm2wWMgIU0zXGLGFugaWLCFwVSqg+uplrB3LM4qHF53ONxrfzFXKKiMkbvnBb/8s46X7cKHBikwsn3Lmkrg9yr4lf0wjQrJF1+0L6vf+bwTP7hIO97JRxBS96LSwJwLEgaPxWbpMTnr0/Y+sV/0aKtQtbfgwwslQV06uGn7EaDFSjr+m0UGGlTW4TVj+zs6nf1ZvycJmbjs4zLKUFkdCUbUSwtPZqRoTGbuJcO76dwIRunJzX2yanaI0Eo9S/S1mOmGXyrGIGFkP2YkLXG48a/ljr6Y4gnG4Qdea/pdDhfOPHegzeKyydMrMNcF/ZOjDVOltlfNqGYxwqwPq8FQlb3DO3j2gymRa1Eblca8OQWsJlEu0=
+after_success:
+- docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+- export REPO=lewnelson/node-userapi
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH
+  ; fi`
+- docker build -f Dockerfile -t $REPO:$COMMIT .
+- docker tag $REPO:$COMMIT $REPO:$TAG
+- docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+- docker push $REPO
