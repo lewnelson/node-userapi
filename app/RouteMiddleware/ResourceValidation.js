@@ -32,14 +32,16 @@ module.exports = class ResourceValidation {
     let errors = {};
     fields.map((field) => {
       let fieldErrors = [],
-          value = req.body[field.key];
+          value = req.body[field.key],
+          attributes = field.attributes || [];
 
-      if(field.attributes.indexOf('required') > -1 && value === undefined) {
+      if(attributes.indexOf('required') > -1 && value === undefined) {
         fieldErrors.push('missing required value');
       } else if(value !== undefined && !this.checkType(value, field.type)) {
         fieldErrors.push('invalid type, expecting ' + field.type);
       } else if(value !== undefined) {
-        field.validate.forEach((validation) => {
+        let validateObjects = field.validate || [];
+        validateObjects.forEach((validation) => {
           if(!validation.callback(value)) {
             fieldErrors.push(validation.error);
           }
@@ -73,7 +75,7 @@ module.exports = class ResourceValidation {
     let errors = {},
         fields;
 
-    if(route.resourceSchema === []) {
+    if(route.resourceSchema.length === 0) {
       return;
     }
 
@@ -81,7 +83,8 @@ module.exports = class ResourceValidation {
       case 'POST':
       case 'PUT':
         fields = route.resourceSchema.filter((field) => {
-          return field.attributes.indexOf('readonly') === -1;
+          let attributes = field.attributes || [];
+          return attributes.indexOf('readonly') === -1;
         });
 
         errors = this.validateFields(req, fields);
@@ -89,13 +92,17 @@ module.exports = class ResourceValidation {
 
       case 'PATCH':
         fields = route.resourceSchema.filter((field) => {
-          return field.attributes.indexOf('readonly') === -1;
+          let attributes = field.attributes || [];
+          return attributes.indexOf('readonly') === -1;
         }).slice().map((field) => {
-          let requiredIndex = field.attributes.indexOf('required');
+          let attributes = field.attributes || [],
+              requiredIndex = attributes.indexOf('required');
+
           if(requiredIndex > -1) {
-            field.attributes.splice(requiredIndex, 1);
+            attributes.splice(requiredIndex, 1);
           }
 
+          field.attributes = attributes;
           return field;
         });
 
