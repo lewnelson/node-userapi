@@ -208,4 +208,4 @@ module.exports = class ResourceController extends Controller {
     err.status = 404;
     return err;
   }
-}
+};

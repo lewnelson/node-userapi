@@ -56,4 +56,4 @@ module.exports = class ServerError extends ErrorHandler {
   log() {
     this.getService('Logger.js').write('error', 'server_error', this.getDebugErrorObject());
   }
-}
+};

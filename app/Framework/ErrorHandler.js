@@ -52,4 +52,4 @@ module.exports = class ErrorHandler extends RequestResponseAware {
    *  @return {void}
    */
   log() {}
-}
+};

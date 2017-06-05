@@ -40,4 +40,4 @@ module.exports = class Container {
 
     return this.resolvedItems[key] || null;
   }
-}
+};

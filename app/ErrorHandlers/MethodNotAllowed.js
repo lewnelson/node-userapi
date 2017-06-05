@@ -30,4 +30,4 @@ module.exports = class MethodNotAllowed extends ErrorHandler {
   log() {
     this.logGenericError('warning', 'method_not_allowed');
   }
-}
+};

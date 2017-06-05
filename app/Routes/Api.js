@@ -8,5 +8,5 @@ module.exports = () => {
         require('./Api/V1.js')()
       ];
     }
-  }
-}
+  };
+};

@@ -25,4 +25,4 @@ module.exports = class BadRequest extends ErrorHandler {
   log() {
     this.logGenericError('warning', 'bad_request');
   }
-}
+};

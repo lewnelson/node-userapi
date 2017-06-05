@@ -38,4 +38,4 @@ module.exports = class Environment extends Service {
   getEnvVar(key) {
     return global.process.env[key];
   }
-}
+};

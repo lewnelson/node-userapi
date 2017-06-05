@@ -25,4 +25,4 @@ module.exports = class ResourceConflict extends ErrorHandler {
   log() {
     this.logGenericError('warning', 'resource_conflict');
   }
-}
+};

@@ -41,4 +41,4 @@ module.exports = class RequestResponseAware extends ServiceAware {
   getResponse() {
     return this.response;
   }
-}
+};

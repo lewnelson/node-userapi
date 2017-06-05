@@ -15,4 +15,4 @@ module.exports = class Model extends ServiceAware {
     error.context = context;
     return error;
   }
-}
+};

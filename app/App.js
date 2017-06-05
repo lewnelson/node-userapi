@@ -193,7 +193,7 @@ module.exports = class App extends ServiceAware {
       route.path = this.concatRoutePath(path, route.path || '');
       this.bindRoute(route);
     } else {
-      throw new Error('route `' + itemPath + '` is invalid and does not contain sub routes or a callback');
+      throw new Error('route `' + path + '` is invalid and does not contain sub routes or a callback');
     }
 
     return route;
@@ -207,7 +207,7 @@ module.exports = class App extends ServiceAware {
    */
   registerRoutes() {
     this.routes = [];
-    this.recursivelyScanDirectory(__dirname + '/Routes', 0, (itemPath, value, namespace) => this.registerRoute(require(itemPath)()));
+    this.recursivelyScanDirectory(__dirname + '/Routes', 0, (itemPath) => this.registerRoute(require(itemPath)()));
   }
 
   /**
@@ -304,4 +304,4 @@ module.exports = class App extends ServiceAware {
       });
     });
   }
-}
+};

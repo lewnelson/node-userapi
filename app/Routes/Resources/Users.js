@@ -93,5 +93,5 @@ module.exports = () => {
         require('./Users/Item.js')()
       ];
     }
-  }
+  };
 };

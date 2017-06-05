@@ -29,4 +29,4 @@ module.exports = class ServiceAware {
   getService(key) {
     return this.getServiceContainer() ? this.getServiceContainer().get(key) : null;
   }
-}
+};

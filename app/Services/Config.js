@@ -67,7 +67,7 @@ module.exports = class Config extends Service {
    */
   getConfig(key, fallback) {
     let parts = key.split('.'),
-        config = clone(this.getCompiledConfiguration())
+        config = clone(this.getCompiledConfiguration());
 
     while(parts.length > 0 && config !== undefined) {
       let next = parts.shift();
@@ -76,4 +76,4 @@ module.exports = class Config extends Service {
 
     return config === undefined ? fallback : config;
   }
-}
+};

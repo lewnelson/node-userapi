@@ -103,4 +103,4 @@ module.exports = class Controller extends RequestResponseAware {
     model.setServiceContainer(this.getServiceContainer());
     return model;
   }
-}
+};

@@ -44,10 +44,10 @@ module.exports = class Database extends Service {
    *  @return {promise}
    */
   setup() {
-    const models = fs.readdirSync(this.getService('Environment.js').getAppDir() + 'DatabaseModels').map((table) => {
+    fs.readdirSync(this.getService('Environment.js').getAppDir() + 'DatabaseModels').map((table) => {
       return require(this.getService('Environment.js').getAppDir() + 'DatabaseModels/' + table)(this.getConnection());
     });
 
     return this.getConnection().sync();
   }
-}
+};

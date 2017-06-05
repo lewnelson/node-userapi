@@ -17,4 +17,4 @@ module.exports = class Logger extends Service {
       context: JSON.stringify(context)
     });
   }
-}
+};

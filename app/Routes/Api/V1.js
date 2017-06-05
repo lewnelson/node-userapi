@@ -8,5 +8,5 @@ module.exports = () => {
         require('../Resources/Users.js')()
       ];
     }
-  }
-}
+  };
+};

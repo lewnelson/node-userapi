@@ -25,4 +25,4 @@ module.exports = class NotFound extends ErrorHandler {
   log() {
     this.logGenericError('notice', 'not_found');
   }
-}
+};

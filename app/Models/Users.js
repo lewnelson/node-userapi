@@ -111,4 +111,4 @@ module.exports = class Users extends Model {
       }
     });
   }
-}
+};
