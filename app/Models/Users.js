@@ -7,7 +7,7 @@ module.exports = class Users extends Model {
   /**
    *  Get total number of users
    *
-   *  @return {int}
+   *  @return {Promise}
    */
   getTotalUsers() {
     return this.getService('Database.js').getDatabaseModel('User.js').count();
@@ -19,7 +19,7 @@ module.exports = class Users extends Model {
    *  @param {int} limit
    *  @param {int} offset
    *  @param {array} ordering
-   *  @return {array} Array of user database models
+   *  @return {Promise}
    */
   getUsers(limit, offset, ordering) {
     let options = {
@@ -41,7 +41,7 @@ module.exports = class Users extends Model {
    *  Create a user from params object
    *
    *  @param {object} params
-   *  @return {User} user database model
+   *  @return {Promise}
    */
   createUser(params) {
     return new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ module.exports = class Users extends Model {
    *  Get a user by id
    *
    *  @param {int} id
-   *  @return {User|null}
+   *  @return {Promise}
    */
   getUser(id) {
     return this.getService('Database.js').getDatabaseModel('User.js').findOne({
@@ -74,7 +74,7 @@ module.exports = class Users extends Model {
    *
    *  @param {int} id
    *  @param {object} params
-   *  @return {User}
+   *  @return {Promise}
    */
   updateUser(id, params) {
     return new Promise((resolve, reject) => {
@@ -92,6 +92,8 @@ module.exports = class Users extends Model {
             reject(err);
           });
         }
+      }).catch((err) => {
+        reject(err);
       });
     });
   }
@@ -100,12 +102,13 @@ module.exports = class Users extends Model {
    *  Delete a user
    *
    *  @param {int} id
-   *  @return {void}
+   *  @return {Promise}
    */
   deleteUser(id) {
-    let user = this.getUser(id);
-    if(user !== null) {
-      user.destroy();
-    }
+    return this.getService('Database.js').getDatabaseModel('User.js').destroy({
+      where: {
+        id: id
+      }
+    });
   }
 }
