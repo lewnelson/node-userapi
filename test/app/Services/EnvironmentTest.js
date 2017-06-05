@@ -25,4 +25,15 @@ describe('Environment service class tests', () => {
 
     expect(path.normalize(env.getControllerDir())).to.equal(expectedPath);
   });
+
+  it('should get env variable from global process on getEnvVar', () => {
+    let key = 'TEST',
+        originalValue = global.process.env[key],
+        value = 'testing';
+
+    global.process.env[key] = value;
+    const environment = new Environment();
+    expect(environment.getEnvVar(key)).to.equal(value);
+    global.process.env[key] = originalValue;
+  });
 });

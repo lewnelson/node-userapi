@@ -28,4 +28,14 @@ module.exports = class Environment extends Service {
   getControllerDir() {
     return this.getAppDir() + 'Controllers/';
   }
+
+  /**
+   *  Get environment variable
+   *
+   *  @param {string} key
+   *  @return {mixed}
+   */
+  getEnvVar(key) {
+    return global.process.env[key];
+  }
 }

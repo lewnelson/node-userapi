@@ -29,32 +29,29 @@ describe('Config service class tests', () => {
 
   it('should load config only once and store on property for getCompiledConfiguration', () => {
     const configService = new Config();
-    const environmentService = { getRootDir: () => '/' };
-    configService.getService = (key) => key === 'Environment.js' ? environmentService : null;
-    const originalFsStatSync = fs.statSync;
-    fs.statSync = (path) => path === '/app_config.yaml' ? { isFile: () => false } : originalFsStatSync;
+    configService.getConfigPath = () => '/app_config.yaml';
+    const originalFsExistsSync = fs.existsSync;
+    fs.existsSync = (path) => path === '/app_config.yaml' ? false : originalFsExistsSync;
     const config = configService.getCompiledConfiguration();
     expect(configService.getCompiledConfiguration()).to.equal(config);
-    fs.statSync = originalFsStatSync;
+    fs.existsSync = originalFsExistsSync;
   });
 
   it('should assign config as empty object when config file does not exist', () => {
     const configService = new Config();
-    const environmentService = { getRootDir: () => '/' };
-    configService.getService = (key) => key === 'Environment.js' ? environmentService : null;
-    const originalFsStatSync = fs.statSync;
-    fs.statSync = (path) => path === '/app_config.yaml' ? { isFile: () => false } : originalFsStatSync;
+    configService.getConfigPath = () => '/app_config.yaml';
+    const originalFsExistsSync = fs.existsSync;
+    fs.existsSync = (path) => path === '/app_config.yaml' ? false : originalFsExistsSync;
     expect(configService.getCompiledConfiguration()).to.deep.equal({});
-    fs.statSync = originalFsStatSync;
+    fs.existsSync = originalFsExistsSync;
   });
 
   it('should load the config yaml file when it exists into configuration', () => {
     const configService = new Config();
-    const environmentService = { getRootDir: () => '/' };
-    configService.getService = (key) => key === 'Environment.js' ? environmentService : null;
+    configService.getConfigPath = () => '/app_config.yaml';
 
-    const originalFsStatSync = fs.statSync;
-    fs.statSync = (path) => path === '/app_config.yaml' ? { isFile: () => true } : originalFsStatSync.apply(fs, arguments);
+    const originalFsExistsSync = fs.existsSync;
+    fs.existsSync = (path) => path === '/app_config.yaml' ? true : originalFsExistsSync;
 
     const configContents = 'test';
     const originalFsReadFileSync = fs.readFileSync;
@@ -74,11 +71,15 @@ describe('Config service class tests', () => {
 
     const expectedConfig = {
       key: 'value',
-      'nested.configuration.value': true
+      nested: {
+        configuration: {
+          value: true
+        }
+      }
     };
 
     expect(configService.getCompiledConfiguration()).to.deep.equal(expectedConfig);
-    fs.statSync = originalFsStatSync;
+    fs.existsSync = originalFsExistsSync;
     fs.readFileSync = originalFsReadFileSync;
     yaml.load = originalYamlLoad;
   });
@@ -101,5 +102,26 @@ describe('Config service class tests', () => {
     };
 
     expect(configService.getConfig('key', null)).to.be.true;
+  });
+
+  it('should return /mnt/data/app_config.yaml when running in docker environment', () => {
+    const configService = new Config();
+    const environmentService = {
+      getEnvVar: (key) => key === 'DOCKER' ? 'true' : undefined
+    };
+
+    configService.getService = (key) => key === 'Environment.js' ? environmentService : null;
+    expect(configService.getConfigPath()).to.equal('/mnt/data/app_config.yaml');
+  });
+
+  it('should return root_dir/app_config.yaml when not running in docker environment', () => {
+    const configService = new Config();
+    const environmentService = {
+      getEnvVar: (key) => undefined,
+      getRootDir: () => '/'
+    };
+
+    configService.getService = (key) => key === 'Environment.js' ? environmentService : null;
+    expect(configService.getConfigPath()).to.equal('/app_config.yaml');
   });
 });

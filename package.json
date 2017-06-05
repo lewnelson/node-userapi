@@ -10,13 +10,12 @@
     "restart": "node_modules/.bin/forever restart index.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "clone": "^2.1.1",
     "express": "^4.15.3",
-    "flat": "^2.0.1",
     "js-yaml": "^3.8.4",
     "sequelize": "^3.30.4",
     "sqlite3": "^3.1.8",
