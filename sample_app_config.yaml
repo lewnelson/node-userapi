@@ -10,6 +10,9 @@
 # Port to bind http server
 port: 8080
 
+# More verbose error reporting
+debug: false
+
 # Sequelize database connection options
 db:
   database: 'main'

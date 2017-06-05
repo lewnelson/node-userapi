@@ -1,4 +1,4 @@
-app_config.yaml
-node_modules
-database.sqlite
-coverage
+/app_config.yaml
+/node_modules
+/database.sqlite
+/coverage

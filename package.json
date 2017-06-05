@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover node_modules/.bin/_mocha -- --recursive",
-    "start": "node index.js"
+    "test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --recursive",
+    "start": "node_modules/.bin/forever start index.js",
+    "stop": "node_modules/.bin/forever stop index.js",
+    "restart": "node_modules/.bin/forever restart index.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +27,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
     "mock-require": "^2.0.2",
+    "portfinder": "^1.0.13",
     "sinon": "^2.3.2"
   }
 }

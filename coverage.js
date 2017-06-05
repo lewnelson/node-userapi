@@ -1,8 +1,13 @@
 'use strict';
 
 const Express = require('express');
+const portfinder = require('portfinder');
 const App = Express();
 App.use(Express.static(__dirname + '/coverage/lcov-report'));
-App.listen(8080);
-console.log('Server listening on port 8080.');
-console.log('For coverage go to /index.html');
+portfinder.getPortPromise().then((port) => {
+  App.listen(port);
+  console.log('Server listening on port ' + port + '.');
+  console.log('For coverage go to /index.html:' + port);
+}).catch((err) => {
+  console.log(err);
+});
