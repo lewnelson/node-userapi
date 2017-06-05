@@ -19,7 +19,8 @@ module.exports = class Database extends Service {
         configService.getConfig('db.password', ''),
         configService.getConfig('db.connectionOptions', {
           dialect: 'sqlite',
-          storage: this.getService('Environment.js').getRootDir() + 'database.sqlite'
+          storage: this.getService('Environment.js').getRootDir() + 'database.sqlite',
+          logging: false
         })
       );
     }

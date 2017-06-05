@@ -21,3 +21,4 @@ db:
   connectionOptions:
     dialect: 'sqlite'
     storage: '%%root_dir%%database.sqlite'
+    logging: false

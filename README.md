@@ -10,6 +10,7 @@
 * [Quick Start](#getting-started)
   * [Using Docker](#using-docker)
   * [Using node](#using-node)
+  * [Seeding Database](#seeding-database)
 * [Dependencies](#dependencies)
 * [API Usage](#api-usage)
   * [Overview](#overview)
@@ -45,6 +46,13 @@ This will setup the database based on your configuration, it defaults to an sqli
 npm stop
 ```
 The process is managed via the [forever](https://www.npmjs.com/package/forever) npm package.
+
+#### Seeding Database
+To seed the database with random data you can run:
+```
+node seed.js {amount}
+```
+Where amount is an unsigned integer for the amount of records to randomly generate for the database users table. Amount defaults to 500. This will use the database connection from `app_config.yaml` or the default sqlite connection and will clear all tables before seeding with new data.
 
 ## Dependencies
 ---
