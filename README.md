@@ -28,7 +28,7 @@ The quickest way to host your own instance is to use the publicly available dock
 ```
 docker run -d -p 8080:8080 -v /path/to/host/app_config/directory:/mnt/data lewnelson/user-api
 ```
-The `/path/to/host/app_config/directory` path should be a path to a directory on your system which should contain an `app_config.yaml` file compatible with the [configuration](#configuration) section. This command will also run the docker container as a daemon process and bind the host port `8080` to the container port `8080`. If your `app_config.yaml` file specifies a different port then the docker command should be changed accordingly.
+The `/path/to/host/app_config/directory` path should be a path to a directory on your system which should contain an `app_config.yaml` file compatible with the [configuration](#configuration) section. This command will also run the docker container as a daemon process and bind the host port `8080` to the container port `8080`. If you are using `app_config.yaml` then you do not need to set the port.
 
 #### Using Node
 If you don't want to use docker then you can use node provided you have all the [dependencies](#dependencies) installed. An `app_config.yaml` file is optional as it is using docker, it should be placed in the application root directory, i.e. alongside `sample_app_config.yaml`. To start the server run:
