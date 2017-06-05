@@ -2,15 +2,15 @@
 ---
 ## Contents
 * [Demo](#demo)
-* [Quick Start](#getting_started)
-  * [Using Docker](#using_docker)
-  * [Using node](#using_node)
+* [Quick Start](#getting-started)
+  * [Using Docker](#using-docker)
+  * [Using node](#using-node)
 * [Dependencies](#dependencies)
-* [API Usage](#api_usage)
+* [API Usage](#api-usage)
   * [Overview](#overview)
   * [Errors](#errors)
-    * [Error Codes](#error_codes)
-  * [Resource Collections](#resource_collections)
+    * [Error Codes](#error-codes)
+  * [Resource Collections](#resource-collections)
   * [Resources](#resources)
     * [Users](#users)
 * [Configuration](#configuration)
@@ -127,7 +127,7 @@ GET, PUT, PATCH, DELETE /v1/users/:id
 ```
 Resource schema:
 | parameter | attributes | description |
-|-----------|------------|-------------|
+| --------- | ---------- | ----------- |
 | `id` | `[primary, readonly, sortable]` | User primary key |
 | `email` | `[required, sortable, unique]` | Must be a valid and unique email address, limited to 255 characters. |
 | `forename` | `[required, sortable]` | Cannot contain numeric characters, limited to 255 characters |
