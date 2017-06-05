@@ -126,6 +126,7 @@ GET, POST /v1/users/
 GET, PUT, PATCH, DELETE /v1/users/:id
 ```
 Resource schema:
+
 | parameter | attributes | description |
 | --------- | ---------- | ----------- |
 | `id` | `[primary, readonly, sortable]` | User primary key |
